@@ -51,3 +51,4 @@ Mad props go to:
 * Add password policy enumeration
 * Dynamic relaying based on where incoming creds have admin rights
 * Getting active sessions???
+* Connect with Bloodhound???
