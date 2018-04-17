@@ -34,7 +34,7 @@ class SMBAttack(Thread):
         rpctransport = transport.SMBTransport(self.__SMBConnection.getRemoteHost(), filename=r'\lsarpc',
                                               smb_connection=self.__SMBConnection)
         dce = rpctransport.get_dce_rpc()
-        maxRid = 5000  # TODO: Change to 50000 after debugging
+        maxRid = 50000
         dce.connect()
 
         dce.bind(lsat.MSRPC_UUID_LSAT)

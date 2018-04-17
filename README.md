@@ -1,6 +1,8 @@
 # RidRelay
 Quick and easy way to get domain usernames while on an internal network.
 
+Hit me up: [@skorov8](https://twitter.com/skorov8)
+
 ## How it works
 RidRelay combines the SMB Relay attack, common lsarpc based queries and RID cycling to get a list of domain usernames. It takes these steps:
 1. Spins up an SMB server and waits for an incoming SMB connection
