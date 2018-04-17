@@ -20,7 +20,7 @@ RidRelay combines the SMB Relay attack, common lsarpc based queries and RID cycl
 pipenv install --two
 pipenv shell
 
-\# Optional if installing impacket
+# Optional: Run if installing impacket
 git submodule update --init --recursive
 cd submodules/impacket
 python setup.py install
@@ -41,7 +41,7 @@ Also output usernames to file
 python ridrelay.py -t 10.0.0.50 -o path_to_output.txt
 ```
 
-*Highly Recommended:* Start Responder to trick users to connecting to RidRelay
+**Highly Recommended:** Start Responder to trick users to connecting to RidRelay
 
 ## Shout out
 Mad props go to:
