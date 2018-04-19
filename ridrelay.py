@@ -1,17 +1,17 @@
 import argparse
-import sys
 import logging
+import sys
 from threading import Thread
 from time import sleep
 
 from impacket import smb, smb3
-from impacket.dcerpc.v5 import transport, lsat, lsad
+from impacket.dcerpc.v5 import lsad, lsat, transport
 from impacket.dcerpc.v5.dtypes import MAXIMUM_ALLOWED
 from impacket.dcerpc.v5.rpcrt import DCERPCException
 from impacket.dcerpc.v5.samr import SID_NAME_USE
-from impacket.examples.ntlmrelayx.servers.smbrelayserver import SMBRelayServer
 from impacket.examples import logger
 from impacket.examples.ntlmrelayx.clients import PROTOCOL_CLIENTS
+from impacket.examples.ntlmrelayx.servers.smbrelayserver import SMBRelayServer
 from impacket.examples.ntlmrelayx.utils.config import NTLMRelayxConfig
 from impacket.examples.ntlmrelayx.utils.targetsutils import TargetsProcessor
 from impacket.smbconnection import SMBConnection
@@ -91,7 +91,7 @@ class SMBAttack(Thread):
                     line = "%d: %s\\%s (%s)" % (
                     soFar + n, resp['ReferencedDomains']['Domains'][item['DomainIndex']]['Name'], item['Name'],
                     SID_NAME_USE.enumItems(item['Use']).name)
-                    print line
+                    print(line)
                     if fh:
                         fh.write(line + '\n')
 
@@ -114,7 +114,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     logger.init()
-    print 'ridrelay v0.1 - Get domain usernames by relaying low priv creds!\n'
+    print('ridrelay v0.1 - Get domain usernames by relaying low priv creds!\n')
 
     logging.getLogger().setLevel(logging.INFO)
     logging.getLogger('impacket.smbserver').setLevel(logging.ERROR)
@@ -143,7 +143,7 @@ if __name__ == '__main__':
         s.start()
         threads.add(s)
 
-    print ""
+    print("")
     logging.info("Servers started, waiting for connections")
     try:
         while not got_usernames:
