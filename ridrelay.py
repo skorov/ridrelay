@@ -10,6 +10,7 @@ from impacket.dcerpc.v5.dtypes import MAXIMUM_ALLOWED
 from impacket.dcerpc.v5.rpcrt import DCERPCException
 from impacket.dcerpc.v5.samr import SID_NAME_USE
 from impacket.examples.ntlmrelayx.servers.smbrelayserver import SMBRelayServer
+from impacket.examples.ntlmrelayx.servers.httprelayserver import HTTPRelayServer
 from impacket.examples import logger
 from impacket.examples.ntlmrelayx.clients import PROTOCOL_CLIENTS
 from impacket.examples.ntlmrelayx.utils.config import NTLMRelayxConfig
@@ -304,8 +305,8 @@ class SAMRDump:
 
 
 if __name__ == '__main__':
-    RELAY_SERVERS = (SMBRelayServer,)  # TODO: Maybe fix HTTP redirects later
-    ATTACKS = {'SMB': SMBAttack}
+    RELAY_SERVERS = (SMBRelayServer,HTTPRelayServer)  # TODO: Maybe fix HTTP redirects later
+    ATTACKS = {'SMB': SMBAttack, 'HTTP': SMBAttack}
 
     parser = argparse.ArgumentParser(description='A sure fire way to enumerate domain usernames')
     parser.add_argument('--target', '-t', metavar='TARGET', required=True, help='An IP address value that states which '
