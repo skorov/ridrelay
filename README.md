@@ -4,10 +4,11 @@ Quick and easy way to get domain usernames while on an internal network.
 Hit me up: [@skorov8](https://twitter.com/skorov8)
 
 ## How it works
-RidRelay combines the SMB Relay attack, common lsarpc based queries and RID cycling to get a list of domain usernames. It takes these steps:
-1. Spins up an SMB server and waits for an incoming SMB connection
+RidRelay combines the NTLM Relay attack, common lsarpc based queries and RID cycling to get a list of domain usernames. It takes these steps:
+1. Spins up an SMB and HTTP servers and waits for an incoming connection
 2. The incoming credentials are relayed to a specified target, creating a connection with the context of the relayed user
 3. Queries are made down the SMB connection to the lsarpc pipe to get the list of domain usernames. This is done by cycling up to 50000 RIDs
+4. The password policy is extracted through the samr pipe
 
 (For best results, use with Responder)
 
@@ -48,7 +49,7 @@ Mad props go to:
 * Ronnie Flathers ([@ropnop](https://twitter.com/ropnop)) - Original idea on low priv smb relaying
 
 ## TODO:
-* Add password policy enumeration
+* Add password policy enumeration *DONE*
 * Dynamic relaying based on where incoming creds have admin rights
 * Getting active sessions???
 * Connect with Bloodhound???

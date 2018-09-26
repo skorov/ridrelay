@@ -9,7 +9,6 @@ from impacket.dcerpc.v5 import transport, lsat, lsad, samr
 from impacket.dcerpc.v5.dtypes import MAXIMUM_ALLOWED
 from impacket.dcerpc.v5.rpcrt import DCERPCException
 from impacket.dcerpc.v5.samr import SID_NAME_USE
-from impacket.examples.ntlmrelayx.servers.smbrelayserver import SMBRelayServer
 from impacket.examples.ntlmrelayx.servers.httprelayserver import HTTPRelayServer
 from impacket.examples import logger
 from impacket.examples.ntlmrelayx.clients import PROTOCOL_CLIENTS
