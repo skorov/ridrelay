@@ -1,6 +1,6 @@
 import argparse
-import sys
 import logging
+import sys
 from threading import Thread
 from time import sleep, strftime, gmtime
 
@@ -13,6 +13,7 @@ from impacket.examples.ntlmrelayx.servers.smbrelayserver import SMBRelayServer
 from impacket.examples.ntlmrelayx.servers.httprelayserver import HTTPRelayServer
 from impacket.examples import logger
 from impacket.examples.ntlmrelayx.clients import PROTOCOL_CLIENTS
+from impacket.examples.ntlmrelayx.servers.smbrelayserver import SMBRelayServer
 from impacket.examples.ntlmrelayx.utils.config import NTLMRelayxConfig
 from impacket.examples.ntlmrelayx.utils.targetsutils import TargetsProcessor
 from impacket.smbconnection import SMBConnection
@@ -352,7 +353,7 @@ if __name__ == '__main__':
         s.start()
         threads.add(s)
 
-    print ""
+    print("")
     logging.info("Servers started, waiting for connections")
     try:
         while not got_usernames:

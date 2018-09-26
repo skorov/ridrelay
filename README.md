@@ -41,7 +41,7 @@ Also output usernames to file
 python ridrelay.py -t 10.0.0.50 -o path_to_output.txt
 ```
 
-**Highly Recommended:** Start Responder to trick users to connecting to RidRelay
+**Highly Recommended:** Start [Responder](https://github.com/SpiderLabs/Responder) to trick users to connecting to RidRelay
 
 ## Shout out
 Mad props go to:
