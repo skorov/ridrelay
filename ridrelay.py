@@ -1,3 +1,4 @@
+from __future__ import print_function
 import argparse
 import logging
 import sys
@@ -99,7 +100,7 @@ class SMBAttack(Thread):
                     line = "%d: %s\\%s (%s)" % (
                         soFar + n, resp['ReferencedDomains']['Domains'][item['DomainIndex']]['Name'], item['Name'],
                         SID_NAME_USE.enumItems(item['Use']).name)
-                    print line
+                    print(line)
                     if fh:
                         fh.write(line + '\n')
 
@@ -320,7 +321,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     logger.init()
-    print 'ridrelay v0.2 - Get domain usernames by relaying low priv creds!\n'
+    print('ridrelay v0.2 - Get domain usernames by relaying low priv creds!\n')
 
     logging.getLogger().setLevel(logging.INFO)
     logging.getLogger('impacket.smbserver').setLevel(logging.ERROR)
