@@ -18,6 +18,11 @@ from impacket.examples.ntlmrelayx.utils.config import NTLMRelayxConfig
 from impacket.examples.ntlmrelayx.utils.targetsutils import TargetsProcessor
 from impacket.smbconnection import SMBConnection
 
+try:
+    xrange          # Python 2
+except NameError:
+    xrange = range  # Python 3
+
 getting_usernames = False
 got_usernames = False
 
