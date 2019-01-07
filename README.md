@@ -13,7 +13,7 @@ RidRelay combines the NTLM Relay attack, common lsarpc based queries and RID cyc
 (For best results, use with Responder)
 
 ## Dependencies
-* Python 2.7 (sorry but impacket doesn't play nice with 3 :( )
+* Python 2.7 (sorry but only the unreleased [__python36__ branch](https://github.com/SecureAuthCorp/impacket/tree/python36) if Impacket will play nice with 3 :( )
 * Impacket v0.9.17 or above
 
 ## Installation
