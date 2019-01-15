@@ -24,7 +24,7 @@ pipenv shell
 # Optional: Run if installing impacket
 git submodule update --init --recursive
 cd submodules/impacket
-python setup.py install
+pip install .
 cd ../..
 ```
 
