@@ -13,12 +13,12 @@ RidRelay combines the NTLM Relay attack, common lsarpc based queries and RID cyc
 (For best results, use with Responder)
 
 ## Dependencies
-* Python 2.7 (sorry but impacket doesn't play nice with 3 :( )
-* Impacket v0.9.17 or above
+* Python 3.6
+* Impacket v0.9.20-dev or above
 
 ## Installation
 ```
-pipenv install --two
+pipenv install
 pipenv shell
 
 # Optional: Run if installing impacket
@@ -49,7 +49,8 @@ Mad props go to:
 * Ronnie Flathers ([@ropnop](https://twitter.com/ropnop)) - Original idea on low priv smb relaying
 
 ## TODO:
-* Add password policy enumeration *DONE*
-* Dynamic relaying based on where incoming creds have admin rights
-* Getting active sessions???
-* Connect with Bloodhound???
+* Add password policy enumeration - *DONE*
+* ~~Dynamic relaying based on where incoming creds have admin rights~~
+* ~~Getting active sessions???~~
+* ~~Connect with Bloodhound???~~
+* Decided to keep this tool simple. Above functionality will come in a new tool at some stage

