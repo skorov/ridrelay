@@ -29,7 +29,7 @@ cd ../..
 ```
 
 ## Usage
-First, find a target host to relay to. The target must be a member of the domain and MUST have SMB Signin off. [CrackMapExec](https://github.com/byt3bl33d3r/CrackMapExec) can get this info for you very quick!
+First, find a target host to relay to. The target must be a member of the domain and MUST have SMB Signing off. [CrackMapExec](https://github.com/byt3bl33d3r/CrackMapExec) can get this info for you very quick!
 
 Start RidRelay pointing to the target:
 ```
