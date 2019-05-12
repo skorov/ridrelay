@@ -101,7 +101,7 @@ class SMBAttack(Thread):
                         SID_NAME_USE.enumItems(item['Use']).name)
                     print(line)
                     if fh:
-                        fh.write(line + '\n')
+                        fh.write(line.encode('utf-8') + '\n')
 
             soFar += SIMULTANEOUS
 
