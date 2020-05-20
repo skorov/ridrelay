@@ -321,7 +321,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     logger.init()
-    print('ridrelay v1.0 - Get domain usernames by relaying low priv creds!\n')
+    print('ridrelay v1.1 - Get domain usernames by relaying low priv creds!\n')
 
     logging.getLogger().setLevel(logging.INFO)
     logging.getLogger('impacket.smbserver').setLevel(logging.ERROR)
