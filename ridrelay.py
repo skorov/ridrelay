@@ -317,6 +317,7 @@ if __name__ == '__main__':
     parser.add_argument('--target', '-t', metavar='TARGET', required=True, help='An IP address value that states which '
                                                                                 'target to relay TO')
     parser.add_argument('--out-file', '-o', metavar='OUTFILE', help='The file to output usernames to.')
+    parser.add_argument('--ipv6', '-6', help='Whether to also listen on IPv6 interface', action='store_true')
     args = parser.parse_args()
 
     logger.init()
@@ -342,6 +343,7 @@ if __name__ == '__main__':
         c.setOutputFile(args.out_file)
         c.setSMB2Support(True)
         c.setInterfaceIp('')
+        c.setIPv6(args.ipv6)
         if server == HTTPRelayServer:
             c.setMode('REFLECTION')
         else:
